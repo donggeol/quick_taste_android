@@ -11,6 +11,8 @@ import android.widget.TextView;
 public class BlogSearchActivity extends AppCompatActivity {
 
     private TextView result_tv;
+    public int test;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
