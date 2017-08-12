@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 
 public class BlogListItem {
     private Drawable icon;
+    private String imgLink;
     private String name;
     private String contents;
     private String post_date;
@@ -19,6 +20,14 @@ public class BlogListItem {
 
     public void setIcon(Drawable icon) {
         this.icon = icon;
+    }
+
+    public String getImgLink() {
+        return imgLink;
+    }
+
+    public void setImgLink(String imgLink) {
+        this.imgLink = imgLink;
     }
 
     public String getName() {

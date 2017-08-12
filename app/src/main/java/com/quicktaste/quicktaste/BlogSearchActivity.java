@@ -21,7 +21,7 @@ public class BlogSearchActivity extends AppCompatActivity {
     private ListView mListView;
     private TextView searchKeyword;
 
-    @Override
+       @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blog_search);
@@ -74,7 +74,7 @@ public class BlogSearchActivity extends AppCompatActivity {
             Log.d("onPost", s);
 
             //[TODO] need to fix this declaration.
-            TextView searchKeyword = (TextView) findViewById(R.id.keyword);
+//            TextView searchKeyword = (TextView) findViewById(R.id.keyword);
             //searchKeyword.setText(s);
 
             JSONParser_Parse(s);
@@ -84,11 +84,7 @@ public class BlogSearchActivity extends AppCompatActivity {
         }
 
         void JSONParser_Parse(String str){
-            StringBuffer sb = new StringBuffer();
-//            String resultInstance;
-            BlogListAdapter mMyAdapter = new BlogListAdapter(getApplicationContext());
-
-//            String ret = "[";
+            BlogListAdapter mMyAdapter = new BlogListAdapter();
 
             try {
                 JSONObject jObject = new JSONObject(str);   // JSONArray 생성
@@ -98,43 +94,20 @@ public class BlogSearchActivity extends AppCompatActivity {
                 JSONArray itemArray = channelObject.getJSONArray("item");
                 for(int i=0; i < itemArray.length(); i++) {
                     JSONObject itemInstance = itemArray.getJSONObject(i);  // JSONObject 추출
+
+                    String imgLink = "https://www.seeklogo.net/wp-content/uploads/2015/07/android-vector-logo.png";
+
                     String title = Html.fromHtml(itemInstance.getJSONArray("title").getString(0)).toString();
-                    String link =  Html.fromHtml(itemInstance.getJSONArray("link").getString(0)).toString();
-                    String description =  Html.fromHtml(itemInstance.getJSONArray("description").getString(0)).toString();
-                    String bloggerName =  Html.fromHtml(itemInstance.getJSONArray("bloggername").getString(0)).toString();
-                    String bloggerLink =  Html.fromHtml(itemInstance.getJSONArray("bloggerlink").getString(0)).toString();
-                    String postDate =  Html.fromHtml(itemInstance.getJSONArray("postdate").getString(0)).toString();
+                    String link = Html.fromHtml(itemInstance.getJSONArray("link").getString(0)).toString();
+                    String description = Html.fromHtml(itemInstance.getJSONArray("description").getString(0)).toString();
+                    String bloggerName = Html.fromHtml(itemInstance.getJSONArray("bloggername").getString(0)).toString();
+                    String bloggerLink = Html.fromHtml(itemInstance.getJSONArray("bloggerlink").getString(0)).toString();
+                    String postDate = Html.fromHtml(itemInstance.getJSONArray("postdate").getString(0)).toString();
 
 
-                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon), title, description, bloggerName + "\n" + postDate, link);
-
-
-
-
-//                    String jsonInstance = "{\"title\":" + title + "," +
-//                                          "\"link\":" + link + "," +
-//                            "\"description\":" + description + "," +
-//                            "\"bloggerName\":" + bloggerName + "," +
-//                            "\"bloggerLink\":" + bloggerLink + "," +
-//                            "\"postDate\":" + postDate + "," + "}";
-
-//                    ret = ret + jsonInstance;
-//                    if(i < itemArray.length())
-//                        ret = ret + ",";
-
-
-
-
-//                    sb.append(
-//                            "Title: " + title + "\n" +
-//                            "Link: " + link + "\n" +
-//                            "Description: " + description + "\n" +
-//                            "Blogger Name: " + bloggerName + "\n" +
-//                            "Blogger Link: " + bloggerLink + "\n" +
-//                            "Post Date: " + postDate + "\n"+ "\n"
-//                    );
+                    //mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon), title, description, bloggerName + "\n" + postDate, link);
+                    mMyAdapter.addItem(imgLink, title, description, bloggerName + "\n" + postDate, link);
                 }
-//                ret = ret + "]";
 
                 /* 리스트뷰에 어댑터 등록 */
                 mListView.setAdapter(mMyAdapter);

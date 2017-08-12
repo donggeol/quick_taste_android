@@ -74,10 +74,14 @@ public class RequestHttpURLConnection {
             os.flush(); // 출력 스트림을 플러시(비운다)하고 버퍼링 된 모든 출력 바이트를 강제 실행.
             os.close(); // 출력 스트림을 닫고 모든 시스템 자원을 해제.
 
+
             // [2-3]. 연결 요청 확인.
             // 실패 시 null을 리턴하고 메서드를 종료.
-            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)
+            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                System.out.println("Fail to connect");
                 return null;
+            }
+
 
             // [2-4]. 읽어온 결과물 리턴.
             // 요청한 URL의 출력물을 BufferedReader로 받는다.
