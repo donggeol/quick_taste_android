@@ -20,6 +20,7 @@ public class BlogSearchActivity extends AppCompatActivity {
 
     private LinearLayout innerContainer;
     private TextView searchKeyword;
+    public int test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
