@@ -30,17 +30,24 @@
         android:layout_marginBottom="24dp"
         android:layout_marginTop="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/keyword"
-        app:layout_constraintVertical_bias="0.013">
+        app:layout_constraintVertical_bias="0.0">
+
 
         <LinearLayout
             android:id="@+id/InnerContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" />
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/blog_search_listview"
+                android:layout_width="match_parent"
+                android:layout_height="464dp" />
+        </LinearLayout>
     </ScrollView>
 
 

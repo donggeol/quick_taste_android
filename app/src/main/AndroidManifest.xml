@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".InstagramSearchActivity" />
-        <activity android:name=".BlogSearchActivity"></activity>
+        <activity android:name=".BlogSearchActivity" />
+        <activity android:name=".Blog_webViewActivity"></activity>
     </application>
 
 </manifest>
