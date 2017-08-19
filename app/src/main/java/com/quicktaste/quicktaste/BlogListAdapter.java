@@ -43,13 +43,13 @@ public class BlogListAdapter extends BaseAdapter {
 
         final Context context = parent.getContext();
 
-        /* 'blog_listview_custom' Layout을 inflate하여 convertView 참조 획득 */
+        /* 'blog_view' Layout을 inflate하여 convertView 참조 획득 */
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.blog_listview_custom, parent, false);
+            convertView = inflater.inflate(R.layout.blog_view, parent, false);
         }
 
-        /* 'blog_listview_custom'에 정의된 위젯에 대한 참조 획득 */
+        /* 'blog_view'에 정의된 위젯에 대한 참조 획득 */
         ImageView iv_img = (ImageView) convertView.findViewById(R.id.iv_blog_img) ;
         TextView tv_post_date = (TextView) convertView.findViewById(R.id.tv_blog_post_date);
         TextView tv_name = (TextView) convertView.findViewById(R.id.tv_blog_title) ;
@@ -73,7 +73,7 @@ public class BlogListAdapter extends BaseAdapter {
                 extras.putString("title", myItem.getName());
                 extras.putString("link", myItem.getLink());
 
-                Intent intent = new Intent(context, Blog_webViewActivity.class);
+                Intent intent = new Intent(context, BlogWebViewActivity.class);
                 intent.putExtras(extras);
                 context.startActivity(intent);
             }

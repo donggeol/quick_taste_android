@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.quicktaste.quicktaste.Blog_webViewActivity">
+    tools:context="com.quicktaste.quicktaste.BlogWebViewActivity">
 
     <WebView
         android:id="@+id/wv_blog"

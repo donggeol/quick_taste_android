@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class Blog_webViewActivity extends AppCompatActivity {
+public class BlogWebViewActivity extends AppCompatActivity {
 
     private WebView mWebView;
     private String title;
