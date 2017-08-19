@@ -96,18 +96,18 @@ public class InstagramSearchActivity extends AppCompatActivity {
         TextView tv_insta_search_result = (TextView) findViewById(R.id.tv_insta_search_result);
         tv_insta_search_result.setText("keyword : " + keyword);
 
-        //TODO initial screen => show saved the last research result
-        JSONParser_Parse(insta_search_sample_result);
+        // test without connecting server
+//        JSONParser_Parse(insta_search_sample_result);
 
 
-//        String url = "http://147.46.114.98:3000/search_insta";
-//
-//        ContentValues param = new ContentValues();
-//
-//        param.put("keyword", keyword);
-//
-//        NetworkTask networkTask = new NetworkTask(url, param);
-//        networkTask.execute();
+        String url = "http://147.46.114.98:3000/search_insta";
+
+        ContentValues param = new ContentValues();
+
+        param.put("keyword", keyword);
+
+        NetworkTask networkTask = new NetworkTask(url, param);
+        networkTask.execute();
     }
 
     public class NetworkTask extends AsyncTask<Void, Void, String> {

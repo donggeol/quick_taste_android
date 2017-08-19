@@ -29,9 +29,16 @@ public class BlogSearchActivity extends AppCompatActivity {
         /* get the listview object */
         mListView = (ListView)findViewById(R.id.blog_search_listview);
 
+        //*********************************Search Blog From MainActivity***********************************************
         // Get the Intent that started this activity and extract the string
+//        Intent intent = getIntent();
+//        String keyword = intent.getStringExtra(MainActivity.KEYWORD);
+        //*********************************Search Blog From MainActivity***********************************************
+
+
         Intent intent = getIntent();
-        String keyword = intent.getStringExtra(MainActivity.KEYWORD);
+        String keyword = intent.getStringExtra(InstagramInstanceViewActivity.HASH_KEYWORD);
+
 
         // Capture the layout's TextView and set the string as its text
         TextView searchKeyword = (TextView) findViewById(R.id.keyword);
@@ -95,6 +102,7 @@ public class BlogSearchActivity extends AppCompatActivity {
                 for(int i=0; i < itemArray.length(); i++) {
                     JSONObject itemInstance = itemArray.getJSONObject(i);  // JSONObject 추출
 
+                    //TODO replace static test imgLink to actual blog img link (need to get from server, but not implemented yet)
                     String imgLink = "https://www.seeklogo.net/wp-content/uploads/2015/07/android-vector-logo.png";
 
                     String title = Html.fromHtml(itemInstance.getJSONArray("title").getString(0)).toString();
