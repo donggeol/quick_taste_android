@@ -87,7 +87,7 @@ public class BlogSearchActivity extends AppCompatActivity {
             BlogListAdapter mMyAdapter = new BlogListAdapter();
 
             try {
-                JSONObject jObject = new JSONObject(str);   // JSONArray 생성
+                JSONObject jObject = new JSONObject(str);
                 JSONObject rss = jObject.getJSONObject("rss");
                 JSONArray channelArray = rss.getJSONArray("channel");
                 JSONObject channelObject = channelArray.getJSONObject(0);
