@@ -20,8 +20,8 @@ public class InstagramSearchActivity extends AppCompatActivity {
             "\t\t  \"tag\":[\"#Korean\" ,\"#KoreanDrama\" ,\"#Kdrama\" ,\"#Seoul\" ,\"#Hallyu\" ,\"#KoreanHallyu\" ,\"#Drakor\" ,\"#Kpopindonesia\" ,\"#dagelan_kpop \" ,\"#kpopnews\" ,\"#kpopupdate Owner\" ], \n" +
             "\t\t  \"link\":\"https://scontent-icn1-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/20838900_505099349870562_1406638455575805952_n.jpg\"},\n" +
             "\t\t {\"count\":\"2\",\n" +
-            "\t\t  \"tag\":[], \n" +
-            "\t\t  \"link\":\"https://scontent-icn1-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c0.135.1080.1080/20901895_1481191188570405_3180841294675050496_n.jpg\"},\n" +
+            "\t\t  \"tag\":[\"#셀카\" ,\"#셀스타그램\" ,\"#얼스타그램\" ,\"#selca\" ,\"#instasize\" ,\"#iphone7plus\" ,\"#selfie\" ,\"#성수동카페\" ,\"#대림창고\" ,\"#서울\" ,\"#여행\" ,\"#daily\" ,\"#dailylook\" ,\"#소통\" ,\"#좋아요\" ,\"#선팔\" ,\"#맞팔\" ,\"#seoul\" ], \n" +
+            "\t\t  \"link\":\"https://scontent-icn1-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c0.117.937.937/20837267_110802336267205_8112631320162598912_n.jpg\"},\n" +
             "\t\t {\"count\":\"3\",\n" +
             "\t\t  \"tag\":[], \n" +
             "\t\t   \"link\":\"https://scontent-icn1-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/20905701_1924928391097751_4179837978916421632_n.jpg\"},\n" +
@@ -74,8 +74,8 @@ public class InstagramSearchActivity extends AppCompatActivity {
             "\t\t  \"tag\":[\"#korea\" ,\"#southkorea\" ,\"#northkorea\" ,\"#dmz\" ,\"#travel\" ,\"#warhistory\" ,\"#seoul\" ,\"#exchangestudent\" ,\"#studyabroad\" ,\"#韓国\" ,\"#朝鮮\" ,\"#留学生\" ,\"#留学\" ,\"#旅行\" ,\"#日本語\" ,\"#日本\" ,\"#ソウル\" ,\"#歴史\" ], \n" +
             "\t\t  \"link\":\"https://scontent-icn1-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c94.0.892.892/20838834_114305912566823_5094925897140535296_n.jpg\"},\n" +
             "\t\t {\"count\":\"20\",\n" +
-            "\t\t  \"tag\":[\"#셀카\" ,\"#셀스타그램\" ,\"#얼스타그램\" ,\"#selca\" ,\"#instasize\" ,\"#iphone7plus\" ,\"#selfie\" ,\"#성수동카페\" ,\"#대림창고\" ,\"#서울\" ,\"#여행\" ,\"#daily\" ,\"#dailylook\" ,\"#소통\" ,\"#좋아요\" ,\"#선팔\" ,\"#맞팔\" ,\"#seoul\" ], \n" +
-            "\t\t  \"link\":\"https://scontent-icn1-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c0.117.937.937/20837267_110802336267205_8112631320162598912_n.jpg\"},\n" +
+            "\t\t  \"tag\":[], \n" +
+            "\t\t  \"link\":\"https://scontent-icn1-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c0.135.1080.1080/20901895_1481191188570405_3180841294675050496_n.jpg\"},\n" +
             "\t\t {\"count\":\"21\",\n" +
             "\t\t  \"tag\":[\"\"], \n" +
             "\t\t  \"link\":\"https://scontent-icn1-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/20838921_351700961925566_1519065636934778880_n.jpg\"}]}";
@@ -97,17 +97,17 @@ public class InstagramSearchActivity extends AppCompatActivity {
         tv_insta_search_result.setText("keyword : " + keyword);
 
         // test without connecting server
-//        JSONParser_Parse(insta_search_sample_result);
+        JSONParser_Parse(insta_search_sample_result);
 
-
-        String url = "http://147.46.114.98:3000/search_insta";
-
-        ContentValues param = new ContentValues();
-
-        param.put("keyword", keyword);
-
-        NetworkTask networkTask = new NetworkTask(url, param);
-        networkTask.execute();
+        //TODO Get data from server (Unstable)
+//        String url = "http://147.46.114.98:3000/search_insta";
+//
+//        ContentValues param = new ContentValues();
+//
+//        param.put("keyword", keyword);
+//
+//        NetworkTask networkTask = new NetworkTask(url, param);
+//        networkTask.execute();
     }
 
     public class NetworkTask extends AsyncTask<Void, Void, String> {
@@ -137,10 +137,7 @@ public class InstagramSearchActivity extends AppCompatActivity {
             //Log.d("onPost", s);
             System.out.println("Instga Result : " + s);
 
-            //[TODO] need to fix this declaration.
-            TextView tv_insta_search_result = (TextView) findViewById(R.id.tv_insta_search_result);
-
-            //TODO JSON Data 처리해서 그리드뷰에 사진 보여주고 -> 사진 클릭 시 해시 태그 등 상세 정보 액티비티로 이동
+            //JSON Data 처리해서 그리드뷰에 사진 보여주고 -> 사진 클릭 시 해시 태그 등 상세 정보 액티비티로 이동
             JSONParser_Parse(s);
         }
 
@@ -175,6 +172,8 @@ public class InstagramSearchActivity extends AppCompatActivity {
 
                 /* 그리드뷰에 어댑터 등록 */
             mGridView.setAdapter(mMyAdapter);
+
+            //TODO some of the items are not showing occasionally
 
 
         } catch (JSONException e) {

@@ -3,11 +3,11 @@ package com.quicktaste.quicktaste;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,6 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class BlogSearchActivity extends AppCompatActivity {
+    public static final String STORE_KEYWORD = "com.quicktaste.quicktaste.STORE_KEYWORD";
+
     private LinearLayout innerContainer;
     private ListView mListView;
     private TextView searchKeyword;
@@ -37,12 +39,26 @@ public class BlogSearchActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        String keyword = intent.getStringExtra(InstagramInstanceViewActivity.HASH_KEYWORD);
-
+        final String keyword = intent.getStringExtra(InstagramInstanceViewActivity.HASH_KEYWORD);
 
         // Capture the layout's TextView and set the string as its text
         TextView searchKeyword = (TextView) findViewById(R.id.keyword);
         searchKeyword.setText("keyword : " + keyword);
+
+
+           //TODO temporal event to go to store info.
+        searchKeyword.setOnLongClickListener(new View.OnLongClickListener(){
+           public boolean onLongClick(View v){
+               Bundle extras = new Bundle();
+               extras.putString(STORE_KEYWORD, keyword);
+
+               Intent intent = new Intent(BlogSearchActivity.this, StoreSearchActivity.class);
+               intent.putExtras(extras);
+               BlogSearchActivity.this.startActivity(intent);
+               return true;
+           }
+        });
+
 
         String url = "http://147.46.121.8:3000/search_naver";
 
@@ -85,46 +101,42 @@ public class BlogSearchActivity extends AppCompatActivity {
             //searchKeyword.setText(s);
 
             JSONParser_Parse(s);
-
-
-
         }
 
-        void JSONParser_Parse(String str){
-            BlogListAdapter mMyAdapter = new BlogListAdapter();
+    }
 
-            try {
-                JSONObject jObject = new JSONObject(str);
-                JSONObject rss = jObject.getJSONObject("rss");
-                JSONArray channelArray = rss.getJSONArray("channel");
-                JSONObject channelObject = channelArray.getJSONObject(0);
-                JSONArray itemArray = channelObject.getJSONArray("item");
-                for(int i=0; i < itemArray.length(); i++) {
-                    JSONObject itemInstance = itemArray.getJSONObject(i);  // JSONObject 추출
+    void JSONParser_Parse(String str){
+        BlogListAdapter mMyAdapter = new BlogListAdapter();
 
-                    //TODO replace static test imgLink to actual blog img link (need to get from server, but not implemented yet)
-                    String imgLink = "https://www.seeklogo.net/wp-content/uploads/2015/07/android-vector-logo.png";
+        try {
+            JSONObject jObject = new JSONObject(str);
+            JSONObject rss = jObject.getJSONObject("rss");
+            JSONArray channelArray = rss.getJSONArray("channel");
+            JSONObject channelObject = channelArray.getJSONObject(0);
+            JSONArray itemArray = channelObject.getJSONArray("item");
+            for(int i=0; i < itemArray.length(); i++) {
+                JSONObject itemInstance = itemArray.getJSONObject(i);  // JSONObject 추출
 
-                    String title = Html.fromHtml(itemInstance.getJSONArray("title").getString(0)).toString();
-                    String link = Html.fromHtml(itemInstance.getJSONArray("link").getString(0)).toString();
-                    String description = Html.fromHtml(itemInstance.getJSONArray("description").getString(0)).toString();
-                    String bloggerName = Html.fromHtml(itemInstance.getJSONArray("bloggername").getString(0)).toString();
-                    String bloggerLink = Html.fromHtml(itemInstance.getJSONArray("bloggerlink").getString(0)).toString();
-                    String postDate = Html.fromHtml(itemInstance.getJSONArray("postdate").getString(0)).toString();
+                //TODO replace static test imgLink to actual blog img link (need to get from server, but not implemented yet)
+                String imgLink = "https://www.seeklogo.net/wp-content/uploads/2015/07/android-vector-logo.png";
 
-
-                    //mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon), title, description, bloggerName + "\n" + postDate, link);
-                    mMyAdapter.addItem(imgLink, title, description, bloggerName + "\n" + postDate, link);
-                }
-
-                /* 리스트뷰에 어댑터 등록 */
-                mListView.setAdapter(mMyAdapter);
+                String title = Html.fromHtml(itemInstance.getJSONArray("title").getString(0)).toString();
+                String link = Html.fromHtml(itemInstance.getJSONArray("link").getString(0)).toString();
+                String description = Html.fromHtml(itemInstance.getJSONArray("description").getString(0)).toString();
+                String bloggerName = Html.fromHtml(itemInstance.getJSONArray("bloggername").getString(0)).toString();
+                String bloggerLink = Html.fromHtml(itemInstance.getJSONArray("bloggerlink").getString(0)).toString();
+                String postDate = Html.fromHtml(itemInstance.getJSONArray("postdate").getString(0)).toString();
 
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+                //mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.icon), title, description, bloggerName + "\n" + postDate, link);
+                mMyAdapter.addItem(imgLink, title, description, bloggerName + "\n" + postDate, link);
             }
 
+                /* 리스트뷰에 어댑터 등록 */
+            mListView.setAdapter(mMyAdapter);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
 //        void addTextView(String s){
@@ -139,7 +151,6 @@ public class BlogSearchActivity extends AppCompatActivity {
 //            tview.setText(s);
 //            innerContainer.addView(tview);
 //        }
-
 
     }
 }

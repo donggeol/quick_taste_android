@@ -39,7 +39,8 @@ public class InstagramInstanceViewActivity extends AppCompatActivity {
         TextView tv_tag;
         if(tags.length == 0){
             tv_tag = new TextView(this);
-            tv_tag.setText("No Hash Tags found.. Plz Find another one.");
+            tv_tag.setText("No Hash Tags found.. \nPlz Find another one.");
+            ll_insta_instance_tagsContainer.addView(tv_tag);
         }
         for(int i = 0 ; i < tags.length; i++){
             tv_tag = new TextView(this);
@@ -55,7 +56,6 @@ public class InstagramInstanceViewActivity extends AppCompatActivity {
             tv_tag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO Auto-generated method stub
                     //이미지를 터치했을때 동작하는 곳
                     Bundle extras = new Bundle();
 

@@ -19,6 +19,8 @@ import java.util.ArrayList;
  */
 
 public class BlogListAdapter extends BaseAdapter {
+
+
     /* 아이템을 세트로 담기 위한 어레이 */
     private ArrayList<BlogListItem> mItems = new ArrayList<>();
 

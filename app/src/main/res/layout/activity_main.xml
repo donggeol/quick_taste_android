@@ -21,7 +21,7 @@
         android:id="@+id/iv_insta_icon"
         android:layout_width="60dp"
         android:layout_height="45dp"
-        android:layout_marginLeft="112dp"
+        android:layout_marginLeft="216dp"
         android:layout_marginTop="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_insta_search"
@@ -50,7 +50,7 @@
         app:layout_constraintLeft_toRightOf="@+id/iv_insta_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_insta_search"
-        app:layout_constraintHorizontal_bias="1.0" />
+        app:layout_constraintHorizontal_bias="0.037" />
 
 
 

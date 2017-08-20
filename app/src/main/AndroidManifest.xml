@@ -24,7 +24,8 @@
         <activity android:name=".InstagramSearchActivity" />
         <activity android:name=".BlogSearchActivity" />
         <activity android:name=".BlogWebViewActivity" />
-        <activity android:name=".InstagramInstanceViewActivity"></activity>
+        <activity android:name=".InstagramInstanceViewActivity" />
+        <activity android:name=".StoreSearchActivity"></activity>
     </application>
 
 </manifest>
