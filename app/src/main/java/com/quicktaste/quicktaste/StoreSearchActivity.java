@@ -1,15 +1,18 @@
 package com.quicktaste.quicktaste;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.nhn.android.maps.NMapActivity;
@@ -17,9 +20,18 @@ import com.nhn.android.maps.NMapController;
 import com.nhn.android.maps.NMapView;
 import com.nhn.android.maps.maplib.NGeoPoint;
 import com.nhn.android.maps.nmapmodel.NMapError;
+import com.nhn.android.maps.overlay.NMapPOIdata;
+import com.nhn.android.maps.overlay.NMapPOIitem;
+import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
+import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
+
+import static com.nhn.android.maps.NMapView.isValidLocation;
 
 public class StoreSearchActivity extends NMapActivity {
 
@@ -29,9 +41,10 @@ public class StoreSearchActivity extends NMapActivity {
             " \"mapaddr\":\"http://map.naver.com/?mapmode=0&lat=37.5642349&lng=126.9853456&pinId=32315856&dlevel=11&enc=b64&pinType=site\",\n" +
             " \"biztime\":\"매일 11:00 - 22:00\",\n" +
             " \"menu_link\":\"https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20161010_63%2Fkyhyb_1476102070310NN8jR_JPEG%2F20161007_125405_HDR.jpg&type=m1000_692&quality=95&autoRotate=true\"}";
+
+    private String store_name;
     private TextView tv_storeName, tv_storeTel, tv_storeAddr, tv_storeTime;
     private ImageView iv_storeMenu;
-
 
     // API-KEY
     public static final String clientId = "igk3XhjV8a1Ys3qi38bK";  //<---맨위에서 발급받은 본인 ClientID 넣으세요.
@@ -42,6 +55,11 @@ public class StoreSearchActivity extends NMapActivity {
     // 맵을 추가할 레이아웃
     LinearLayout MapContainer;
 
+    NMapViewerResourceProvider mMapViewerResourceProvider = null; //NMapViewerResourceProvider 클래스 상속
+    NMapOverlayManager mOverlayManager; //지도 위에 표시되는 오버레이 객체를 관리한다.
+    NMapPOIdataOverlay.OnStateChangeListener onPOIdataStateChangeListener = null; //POI 아이템의 선택 상태 변경 시 호출되는 콜백 인터페이스를 정의한다.
+    NMapOverlayManager.OnCalloutOverlayListener onCalloutOverlayListener; //말풍선 오버레이 객체 생성 시 호출되는 콜백 인터페이스를 정의한다.
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +67,7 @@ public class StoreSearchActivity extends NMapActivity {
 
         Intent intent = getIntent();
         String keyword = intent.getStringExtra(BlogSearchActivity.STORE_KEYWORD);
+        store_name = keyword;
 
         // Capture the layout's TextView and set the string as its text
         tv_storeName = (TextView) findViewById(R.id.tv_store_search_name);
@@ -63,6 +82,39 @@ public class StoreSearchActivity extends NMapActivity {
         // 네이버 지도를 넣기 위한 LinearLayout 컴포넌트
         MapContainer = (LinearLayout) findViewById(R.id.ll_MapContainer);
 
+        // 네이버 지도 객체 생성
+        mMapView = new NMapView(this);
+
+        // 지도 객체로부터 컨트롤러 추출
+        mMapController = mMapView.getMapController();
+
+        // 네이버 지도 객체에 clientId 지정
+        mMapView.setClientId(clientId);
+
+        // 생성된 네이버 지도 객체를 LinearLayout에 추가시킨다.
+        MapContainer.addView(mMapView);
+
+        // 지도를 터치할 수 있도록 옵션 활성화
+        mMapView.setClickable(true);
+
+        // 확대/축소를 위한 줌 컨트롤러 표시 옵션 활성화
+        mMapView.setBuiltInZoomControls(true, null);
+
+
+        // 지도에 대한 상태 변경 이벤트 연결
+//        mMapView.setOnMapStateChangeListener(onMapViewStateChangeListener);
+//        mMapView.setOnMapViewTouchEventListener(onMapViewTouchEventListener);
+
+
+        //create resource provider(오버레이 객체)
+        mMapViewerResourceProvider = new NMapViewerResourceProvider(this); //NMapViewerResourceProvider 클래스 상속
+        mOverlayManager = new NMapOverlayManager(this, mMapView, mMapViewerResourceProvider); //오버레이 객체를 화면에 표시하기 위하여 NMapResourceProvider 클래스를 상속받은 resourceProvider 객체를 전달한다
+        mOverlayManager.setOnCalloutOverlayListener(onCalloutOverlayListener); //말풍선 오버레이 객체 생성 시 호출되는 콜백 인터페이스를 설정한다.
+
+
+
+
+
 
         ContentValues param = new ContentValues();
 
@@ -71,14 +123,6 @@ public class StoreSearchActivity extends NMapActivity {
         StoreSearchActivity.NetworkTask networkTask = new StoreSearchActivity.NetworkTask(url, param);
         networkTask.execute();
 
-    }
-
-    public void onMapInitHandler(NMapView mapView, NMapError errorInfo) {
-        if (errorInfo == null) { // success
-            mMapController.setMapCenter(new NGeoPoint(126.9853456, 37.5642349), 11);
-        } else { // fail
-//            Log.e(LOG_TAG, "onMapInitHandler: error=" + errorInfo.toString());
-        }
     }
 
     public class NetworkTask extends AsyncTask<Void, Void, String> {
@@ -129,49 +173,98 @@ public class StoreSearchActivity extends NMapActivity {
             System.out.println("biztel : " + biztel + " biztime : " + biztime + " bizaddr : " + bizaddr + " mapaddrLink :" + mapaddrLink + " menuLink : " + menuLink);
 
 
-            if(mapaddrLink=="")
-                System.out.println("mapaddrLink Test NULL3");
-
-            //TODO NULL error handling
-            //TODO make it to "MapView"
-//            if(mapaddrLink!=""){
-//                wv_store_search_map.setWebViewClient(new WebViewClient());
-//                mapaddrLink = new StringBuilder(mapaddrLink).insert(7, "m.").toString();
-//                wv_store_search_map.loadUrl(mapaddrLink);
-//            }
-
             if(menuLink!=null)
                 Glide.with(this).load(menuLink).into(iv_storeMenu);
 
 
-            // 네이버 지도 객체 생성
-            mMapView = new NMapView(this);
+            //네이버 지도 위치 검색 결과로 변경
+            Location location = findGeoPoint(this, bizaddr);
+            double lon = location.getLongitude();
+            double lat = location.getLatitude();
+            if(isValidLocation(lon, lat)){
+                mMapController.setMapCenter(new NGeoPoint(lon, lat), 11);
+                System.out.println("DEBUG: valid location   lon : " + lon + " lat : " + lat);
+            }
+            else{
+                System.out.println("DEBUG: not valid location  lon : " + lon + " lat : " + lat);
+                String[] parts = mapaddrLink.split("&", 4);
+                String dummy = parts[0];
+                lat = Double.parseDouble(parts[1].substring(4));
+                lon = Double.parseDouble(parts[2].substring(4));
+                System.out.println("DEBUG: Parsed by MapLink data : lat = " + lat + " lon = " + lon);
+            }
 
-            // 지도 객체로부터 컨트롤러 추출
-            mMapController = mMapView.getMapController();
+            //네이버 지도 오버레이 변경
+            int markerId = NMapPOIflagType.PIN;
+            NMapPOIdata poiData = new NMapPOIdata(2, mMapViewerResourceProvider); //전체 POI 아이템의 개수와 NMapResourceProvider를 상속받은 클래스를 인자로 전달한다.
+            poiData.beginPOIdata(2); //POI 아이템 추가를 시작한다.
 
-            // 네이버 지도 객체에 clientId 지정
-            mMapView.setClientId(clientId);
+            NMapPOIitem item1 = poiData.addPOIitem(lon, lat, store_name, markerId, 0); //POI아이템 설정
+            item1.setRightAccessory(true, NMapPOIflagType.CLICKABLE_ARROW); //마커 선택 시 표시되는 말풍선의 오른쪽 아이콘을 설정한다.
+            item1.hasRightAccessory(); //마커 선택 시 표시되는 말풍선의 오른쪽 아이콘 설정 여부를 반환한다.
+            item1.setRightButton(true); //마커 선택 시 표시되는 말풍선의 오른쪽 버튼을 설정한다.
+            item1.showRightButton(); //마커 선택 시 표시되는 말풍선의 오른쪽 버튼 설정 여부를 반환한다.
 
-            // 생성된 네이버 지도 객체를 LinearLayout에 추가시킨다.
-            MapContainer.addView(mMapView);
+//            poiData.addPOIitem(126.872772, 37.546848, "KB국민은행 염창역 지점 앞", markerId, 0); //경도위도 좌표 입력해주면, 그 좌표가 표시됨
+            poiData.endPOIdata(); //POI 아이템 추가를 종료한다.
 
-            // 지도를 터치할 수 있도록 옵션 활성화
-            mMapView.setClickable(true);
+            NMapPOIdataOverlay poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null); //POI 데이터를 인자로 전달하여 NMapPOIdataOverlay 객체를 생성한다.
+            poiDataOverlay.showAllPOIdata(0); //POI 데이터가 모두 화면에 표시되도록 지도 축척 레벨 및 지도 중심을 변경한다. zoomLevel이 0이 아니면 지정한 지도 축척 레벨에서 지도 중심만 변경한다.
+            poiDataOverlay.setOnStateChangeListener(onPOIdataStateChangeListener); //POI 아이템의 선택 상태 변경 시 호출되는 콜백 인터페이스를 설정한다.
 
-            // 확대/축소를 위한 줌 컨트롤러 표시 옵션 활성화
-            mMapView.setBuiltInZoomControls(true, null);
+            // set data provider listener
+//        super.setMapDataProviderListener(onDataProviderListener); //지도 라이브러리에서 제공하는 서버 API 호출 시 응답에 대한 콜백 인터페이스를 설정한다.
 
-            // 지도에 대한 상태 변경 이벤트 연결
-//        mMapView.setOnMapStateChangeListener(onMapViewStateChangeListener);
-//        mMapView.setOnMapViewTouchEventListener(onMapViewTouchEventListener);
-
-            // enable built in app control;
-            mMapView.executeNaverMap();
+//            // enable built in app control;
+//            mMapView.executeNaverMap();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void onMapInitHandler(NMapView mapView, NMapError errorInfo) {
+        if (errorInfo == null) { // success
+            mMapController.setMapCenter(new NGeoPoint(126.9853456, 37.5642349), 11);
+        } else { // fail
+//            Log.e(LOG_TAG, "onMapInitHandler: error=" + errorInfo.toString());
+        }
+    }
+
+    public static Location findGeoPoint(Context mcontext, String address) {
+        Location loc = new Location("");
+        Geocoder coder = new Geocoder(mcontext);
+        List<Address> addr = null;// 한좌표에 대해 두개이상의 이름이 존재할수있기에 주소배열을 리턴받기 위해 설정
+
+        try {
+            addr = coder.getFromLocationName(address, 5);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }// 몇개 까지의 주소를 원하는지 지정 1~5개 정도가 적당
+        if (addr != null) {
+            for (int i = 0; i < addr.size(); i++) {
+                Address lating = addr.get(i);
+                double lat = lating.getLatitude(); // 위도가져오기
+                double lon = lating.getLongitude(); // 경도가져오기
+                loc.setLatitude(lat);
+                loc.setLongitude(lon);
+            }
+        }
+        return loc;
+    }
+
+    public void onCalloutClick(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
+        // [[TEMP]] handle a click event of the callout
+        Toast.makeText(StoreSearchActivity.this, "onCalloutClick: " + item.getTitle(), Toast.LENGTH_LONG).show();
+    }
+
+    public void onFocusChanged(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
+        if (item != null) {
+            Toast.makeText(StoreSearchActivity.this, "onFocusChanged: " + item.toString(), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(StoreSearchActivity.this, "onFocusChanged", Toast.LENGTH_LONG).show();
+        }
     }
 }
