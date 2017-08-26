@@ -143,7 +143,6 @@ public class InstagramSearchActivity extends AppCompatActivity {
 
     }
 
-
     void JSONParser_Parse(String str){
         InstagramGridAdapter mMyAdapter = new InstagramGridAdapter();
 
