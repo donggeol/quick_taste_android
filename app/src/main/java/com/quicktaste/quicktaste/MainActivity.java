@@ -65,12 +65,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         iv_icon = (ImageView) findViewById(R.id.icon) ;
-        iv_insta_icon = (ImageView) findViewById(R.id.iv_insta_icon) ;
+//        iv_insta_icon = (ImageView) findViewById(R.id.iv_insta_icon) ;
 
         //Glide library로 url에서 이미지 가져와 imageview에 보여주기
 //        Glide.with(this).load("https://cdn0.iconfinder.com/data/icons/flat-round-system/512/qt-512.png").into(iv_icon);
-        iv_icon.setImageResource(R.drawable.icon_main_bright);
-        Glide.with(this).load("http://blogfiles6.naver.net/20160512_203/xxx09xxx_1462988823834vqn3h_JPEG/3059740-slide-s-2b-an-exclusive-look-at-instagrams-new-app-icon-copy-1.jpg").into(iv_insta_icon);
+//        iv_icon.setImageResource(R.drawable.icon_main_bright);
+//        Glide.with(this).load("http://blogfiles6.naver.net/20160512_203/xxx09xxx_1462988823834vqn3h_JPEG/3059740-slide-s-2b-an-exclusive-look-at-instagrams-new-app-icon-copy-1.jpg").into(iv_insta_icon);
 
         //*********************************Search Blog From MainActivity***********************************************
 //        iv_blog_icon = (ImageView) findViewById(R.id.iv_blog_icon) ;
