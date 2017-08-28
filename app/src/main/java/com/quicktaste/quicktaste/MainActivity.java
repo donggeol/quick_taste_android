@@ -1,29 +1,16 @@
 package com.quicktaste.quicktaste;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
-import android.hardware.display.DisplayManager;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 class BackPressCloseHandler {
 
@@ -82,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Glide library로 url에서 이미지 가져와 imageview에 보여주기
 //        Glide.with(this).load("https://cdn0.iconfinder.com/data/icons/flat-round-system/512/qt-512.png").into(iv_icon);
-        iv_icon.setImageResource(R.drawable.icon_main);
+        iv_icon.setImageResource(R.drawable.icon_main_bright);
         Glide.with(this).load("http://blogfiles6.naver.net/20160512_203/xxx09xxx_1462988823834vqn3h_JPEG/3059740-slide-s-2b-an-exclusive-look-at-instagrams-new-app-icon-copy-1.jpg").into(iv_insta_icon);
 
         //*********************************Search Blog From MainActivity***********************************************
