@@ -1,6 +1,7 @@
 package com.quicktaste.quicktaste;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
@@ -47,6 +48,7 @@ public class InstagramInstanceViewActivity extends AppCompatActivity {
             if(tags[i].length() > 20)
                 tags[i] = tags[i].substring(0, 19) + "...";
             tv_tag.setText(tags[i]);
+            tv_tag.setTextColor(Color.argb(255, 255, 0, 0));
             tv_tag.setTextSize(20);
             tv_tag.setId(i);
 
