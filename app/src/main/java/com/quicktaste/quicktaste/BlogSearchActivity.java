@@ -43,7 +43,7 @@ public class BlogSearchActivity extends AppCompatActivity {
 
         // Capture the layout's TextView and set the string as its text
         TextView searchKeyword = (TextView) findViewById(R.id.keyword);
-        searchKeyword.setText("keyword : " + keyword);
+        searchKeyword.setText(keyword);
 
 
            //TODO temporal event to go to store info.

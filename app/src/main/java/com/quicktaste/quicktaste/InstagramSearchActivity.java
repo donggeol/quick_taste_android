@@ -95,7 +95,7 @@ public class InstagramSearchActivity extends AppCompatActivity {
 
         // Capture the layout's TextView and set the string as its text
         TextView tv_insta_search_result = (TextView) findViewById(R.id.tv_insta_search_result);
-        tv_insta_search_result.setText("keyword : " + keyword);
+        tv_insta_search_result.setText(keyword);
 
         // test without connecting server
 //        JSONParser_Parse(insta_search_sample_result);

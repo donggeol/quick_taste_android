@@ -61,8 +61,8 @@ public class BlogListAdapter extends BaseAdapter {
         final BlogListItem myItem = getItem(position);
 
         /* 각 위젯에 세팅된 아이템을 뿌려준다 */
-        //iv_img.setImageDrawable(myItem.getIcon());
-        Glide.with(context).load(myItem.getImgLink()).into(iv_img); //Glide library로 url에서 이미지 가져와 imageview에 보여주기
+        iv_img.setImageResource(R.drawable.icon_main_bright);
+//        Glide.with(context).load(myItem.getImgLink()).into(iv_img); //Glide library로 url에서 이미지 가져와 imageview에 보여주기
 
         tv_post_date.setText(myItem.getPost_date());
         tv_name.setText(myItem.getName());
