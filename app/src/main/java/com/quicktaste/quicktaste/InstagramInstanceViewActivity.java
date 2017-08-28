@@ -56,19 +56,18 @@ public class InstagramInstanceViewActivity extends AppCompatActivity {
             tv_tag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //이미지를 터치했을때 동작하는 곳
+                    //태그를 터치했을때 동작하는 곳
                     Bundle extras = new Bundle();
 
                     extras.putString(HASH_KEYWORD, tag_search_keyword);
                     Intent intent = new Intent(InstagramInstanceViewActivity.this, BlogSearchActivity.class);
-
-//                    extras.putString("title", "no title");
-//                    extras.putString("link", "https:/naver.com/");
-//                    Intent intent = new Intent(InstagramInstanceViewActivity.this, BlogWebViewActivity.class);
-
-
                     intent.putExtras(extras);
                     InstagramInstanceViewActivity.this.startActivity(intent);
+
+                    //새로운 앱에 화면 띄우기
+                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.example.kpark.qt_smart_viewer");
+                    launchIntent.putExtras(extras);
+                    startActivity(launchIntent);
                 }
             });
 

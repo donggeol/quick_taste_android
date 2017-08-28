@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class InstagramSearchActivity extends AppCompatActivity {
+    private static String url = "http://147.46.114.98:3000/search_insta";
     private GridView mGridView;
 
     private String insta_search_sample_result = "{\"item\":[{\"count\":\"1\",\n" +
@@ -97,17 +98,16 @@ public class InstagramSearchActivity extends AppCompatActivity {
         tv_insta_search_result.setText("keyword : " + keyword);
 
         // test without connecting server
-        JSONParser_Parse(insta_search_sample_result);
+//        JSONParser_Parse(insta_search_sample_result);
 
         //TODO Get data from server (Unstable)
-//        String url = "http://147.46.114.98:3000/search_insta";
-//
-//        ContentValues param = new ContentValues();
-//
-//        param.put("keyword", keyword);
-//
-//        NetworkTask networkTask = new NetworkTask(url, param);
-//        networkTask.execute();
+
+        ContentValues param = new ContentValues();
+
+        param.put("keyword", keyword);
+
+        NetworkTask networkTask = new NetworkTask(url, param);
+        networkTask.execute();
     }
 
     public class NetworkTask extends AsyncTask<Void, Void, String> {
@@ -137,6 +137,7 @@ public class InstagramSearchActivity extends AppCompatActivity {
             //Log.d("onPost", s);
             System.out.println("Instga Result : " + s);
 
+            //TODO 검색 결과 없을 때 예외 처리
             //JSON Data 처리해서 그리드뷰에 사진 보여주고 -> 사진 클릭 시 해시 태그 등 상세 정보 액티비티로 이동
             JSONParser_Parse(s);
         }
@@ -166,13 +167,13 @@ public class InstagramSearchActivity extends AppCompatActivity {
 //                            System.out.println("empty tags");
                 }
 
+
+                //TODO some of the items are not showing sometimes (객체 자체가 생성이 안되는 것 같다)
                 mMyAdapter.addItem(count, tags, link);
             }
 
-                /* 그리드뷰에 어댑터 등록 */
+            /* 그리드뷰에 어댑터 등록 */
             mGridView.setAdapter(mMyAdapter);
-
-            //TODO some of the items are not showing occasionally
 
 
         } catch (JSONException e) {

@@ -100,7 +100,10 @@ public class BlogSearchActivity extends AppCompatActivity {
 //            TextView searchKeyword = (TextView) findViewById(R.id.keyword);
             //searchKeyword.setText(s);
 
+            //TODO 검색 결과 없을 때 예외 처리
             JSONParser_Parse(s);
+
+
         }
 
     }
@@ -132,7 +135,7 @@ public class BlogSearchActivity extends AppCompatActivity {
                 mMyAdapter.addItem(imgLink, title, description, bloggerName + "\n" + postDate, link);
             }
 
-                /* 리스트뷰에 어댑터 등록 */
+            /* 리스트뷰에 어댑터 등록 */
             mListView.setAdapter(mMyAdapter);
 
         } catch (JSONException e) {

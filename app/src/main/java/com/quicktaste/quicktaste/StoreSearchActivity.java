@@ -1,8 +1,10 @@
 package com.quicktaste.quicktaste;
 
+import android.app.ActivityManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -17,11 +19,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapController;
+import com.nhn.android.maps.NMapOverlay;
+import com.nhn.android.maps.NMapOverlayItem;
 import com.nhn.android.maps.NMapView;
 import com.nhn.android.maps.maplib.NGeoPoint;
 import com.nhn.android.maps.nmapmodel.NMapError;
 import com.nhn.android.maps.overlay.NMapPOIdata;
 import com.nhn.android.maps.overlay.NMapPOIitem;
+import com.nhn.android.mapviewer.overlay.NMapCalloutOverlay;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 
@@ -33,8 +38,7 @@ import java.util.List;
 
 import static com.nhn.android.maps.NMapView.isValidLocation;
 
-public class StoreSearchActivity extends NMapActivity {
-
+public class StoreSearchActivity extends NMapActivity  {
     private static String url = "http://147.46.121.8:3000/get_store_info";
     private static String blog_store_search_sample_result = "{\"biztel\":\"02-753-1230\",\n" +
             " \"bizaddr\":\"서울 중구 명동길 55\",\n" +
@@ -75,6 +79,7 @@ public class StoreSearchActivity extends NMapActivity {
 
         tv_storeTel = (TextView) findViewById(R.id.tv_store_search_tel);
         tv_storeTime = (TextView) findViewById(R.id.tv_store_search_time);
+//        tv_storeTime.setWidth(350);
         tv_storeAddr = (TextView) findViewById(R.id.tv_store_search_addr);
 
         iv_storeMenu = (ImageView) findViewById(R.id.iv_store_search_menu);
@@ -151,6 +156,7 @@ public class StoreSearchActivity extends NMapActivity {
             super.onPostExecute(s);
             Log.d("onPost", s);
 
+            //TODO 검색 결과 없을 때 예외 처리
             JSONParser_Parse(s);
         }
 
@@ -255,16 +261,28 @@ public class StoreSearchActivity extends NMapActivity {
         return loc;
     }
 
+
+    //TODO 오버레이 말풍선 아이템 클릭하면 네이버 지도 앱으로 넘어가도록
     public void onCalloutClick(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
         // [[TEMP]] handle a click event of the callout
         Toast.makeText(StoreSearchActivity.this, "onCalloutClick: " + item.getTitle(), Toast.LENGTH_LONG).show();
+        System.out.println("DEBUG: " + "onCalloutClick: " + item.getTitle());
     }
 
     public void onFocusChanged(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
         if (item != null) {
             Toast.makeText(StoreSearchActivity.this, "onFocusChanged: " + item.toString(), Toast.LENGTH_LONG).show();
+            System.out.println("DEBUG: " + "onFocusChanged: " + item.toString());
         } else {
             Toast.makeText(StoreSearchActivity.this, "onFocusChanged", Toast.LENGTH_LONG).show();
+            System.out.println("DEBUG: " + "onFocusChanged");
         }
     }
+
+    public NMapCalloutOverlay onCreateCalloutOverlay(NMapOverlay itemOverlay, NMapOverlayItem overlayItem, Rect itemBounds) {
+        // set your callout overlay
+        Toast.makeText(StoreSearchActivity.this, "onCreateCalloutOverlay: " + overlayItem.toString(), Toast.LENGTH_LONG).show();
+        return new NMapCalloutBasicOverlay(itemOverlay, overlayItem, itemBounds);
+    }
+
 }

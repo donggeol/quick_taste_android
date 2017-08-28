@@ -76,7 +76,7 @@ public class InstagramGridAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+                // TODO 앱 새로 띄운다.
                 //이미지를 터치했을때 동작하는 곳
                 Bundle extras = new Bundle();
                 extras.putInt("count", myItem.getCount());

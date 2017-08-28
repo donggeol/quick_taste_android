@@ -1,10 +1,16 @@
 package com.quicktaste.quicktaste;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.display.DisplayManager;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String KEYWORD_INSTA = "com.quicktaste.quicktaste.KEYWORD_INSTA";
     private ImageView iv_icon, iv_blog_icon, iv_insta_icon;
 
+
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
@@ -74,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
         iv_insta_icon = (ImageView) findViewById(R.id.iv_insta_icon) ;
 
         //Glide library로 url에서 이미지 가져와 imageview에 보여주기
-        Glide.with(this).load("https://cdn0.iconfinder.com/data/icons/flat-round-system/512/qt-512.png").into(iv_icon);
+//        Glide.with(this).load("https://cdn0.iconfinder.com/data/icons/flat-round-system/512/qt-512.png").into(iv_icon);
+        iv_icon.setImageResource(R.drawable.icon_main);
         Glide.with(this).load("http://blogfiles6.naver.net/20160512_203/xxx09xxx_1462988823834vqn3h_JPEG/3059740-slide-s-2b-an-exclusive-look-at-instagrams-new-app-icon-copy-1.jpg").into(iv_insta_icon);
-
 
         //*********************************Search Blog From MainActivity***********************************************
 //        iv_blog_icon = (ImageView) findViewById(R.id.iv_blog_icon) ;

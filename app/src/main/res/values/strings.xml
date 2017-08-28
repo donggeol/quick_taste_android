@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">quicktaste</string>
+    <string name="app_name">Quick Taste</string>
 
     <string name="title_activity_splash">SplashActivity</string>
     <string name="dummy_button">Dummy Button</string>
-    <string name="splash_content">QUICK\nTASTE\n(T.B.D)</string>
+    <string name="splash_content">QUICK TASTE</string>
     <string name="str_done">완료</string>
 </resources>
