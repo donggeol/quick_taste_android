@@ -66,7 +66,7 @@ public class InstagramInstanceViewActivity extends AppCompatActivity {
                     intent.putExtras(extras);
                     InstagramInstanceViewActivity.this.startActivity(intent);
 
-                    //새로운 앱에 화면 띄우기
+                    //새로운 앱에 화면 띄우기  Extra Screen에 smart viewer app 실행
                     Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.example.kpark.qt_smart_viewer");
                     launchIntent.putExtras(extras);
                     startActivity(launchIntent);
